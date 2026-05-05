@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InnovaCoach App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">InnovaCoach.it</div>
+      <small>Piattaforma di coaching personale</small>
+    </div>
+    {% if user %}
+      <a class="btn" href="{{ url_for('dashboard') }}">Dashboard</a>
+    {% else %}
+      <a class="btn" href="{{ url_for('login') }}">Login con Google</a>
+    {% endif %}
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Coaching digitale con accesso Google</h1>
+      <p>Dopo il login puoi usare i principali strumenti di coaching e salvare i risultati direttamente nel tuo account personale.</p>
+      {% if user %}
+        <a class="btn" href="{{ url_for('dashboard') }}">Apri la tua area</a>
+      {% else %}
+        <a class="btn" href="{{ url_for('login') }}">Accedi con Google</a>
+      {% endif %}
+    </section>
+
+    <section>
+      <h2>Strumenti disponibili</h2>
+      <div class="grid">
+        {% for tool in tools.values() %}
+          <article class="card">
+            <h3>{{ tool.name }}</h3>
+            <p>{{ tool.description }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+</body>
+</html>

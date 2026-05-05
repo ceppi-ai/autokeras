@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard InnovaCoach</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">InnovaCoach.it</div>
+      <small>Benvenuto, {{ user.name }}</small>
+    </div>
+    <a class="btn-outline" href="{{ url_for('logout') }}">Logout</a>
+  </header>
+
+  <main class="container two-col">
+    <section class="card">
+      <h2>Registra nuovo risultato</h2>
+      <form method="post" action="{{ url_for('save_result') }}">
+        <label>Strumento</label>
+        <select name="tool_key" required>
+          {% for key, tool in tools.items() %}
+            <option value="{{ key }}">{{ tool.name }}</option>
+          {% endfor %}
+        </select>
+
+        <label>Titolo sessione</label>
+        <input name="title" required placeholder="Es: Revisione obiettivo trimestrale">
+
+        <label>Note</label>
+        <textarea name="notes" rows="4" placeholder="Cosa hai fatto e cosa hai imparato?"></textarea>
+
+        <label>Punteggio (0-100)</label>
+        <input name="score" type="number" min="0" max="100" placeholder="85">
+
+        <button class="btn" type="submit">Salva risultato</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Storico personale</h2>
+      {% if rows %}
+        <ul class="results">
+          {% for row in rows %}
+            <li>
+              <strong>{{ tools[row['tool_key']].name }}</strong> — {{ row['title'] }}<br>
+              <small>{{ row['created_at'] }}{% if row['score'] is not none %} · Score: {{ row['score'] }}{% endif %}</small>
+              {% if row['notes'] %}<p>{{ row['notes'] }}</p>{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Nessun risultato registrato finora.</p>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
